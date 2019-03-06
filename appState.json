@@ -1,0 +1,85 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "0936680c-c4b1-4b95-a456-f054f30dca39": {
+        "id": "0936680c-c4b1-4b95-a456-f054f30dca39",
+        "parent": null,
+        "name": "getBankAccounts",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f"
+        ],
+        "isRemovable": false,
+        "filePath": "getBankAccounts"
+      },
+      "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f": {
+        "id": "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f",
+        "parent": "0936680c-c4b1-4b95-a456-f054f30dca39",
+        "name": "lambda.js",
+        "type": "LAMBDA_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "getBankAccounts/lambda.js",
+        "code": "\nlet Swagger = require('swagger-client');\n\nexports.handler = function (event, context, callback) {\n\n    Swagger.http({\n        url: 'https://services.apixplatform.com/api-sandbox/application/token',\n        method: 'post',\n        query: {},\n        headers: { \"Accept\": \"*/*\", \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n            \"userName\": \"Mmbank1@apixdemo.com\",\n            \"password\": \"Passw0rd@\"\n        })\n    }).then((response) => {\n        var access_token = \"bearer \" + response.body.access_token;\n        // Insert new API calls here to call with APIX Access Token\n        Swagger.http({\n            url: `https://api.apixplatform.com/sbbank/1.0/bank/banks/banks`,\n            method: 'get',\n            query: { \"page\": \"0\", \"size\": \"5\" },\n            headers: { \"X-Authorization\": access_token, \"Accept\": \"*/*\" }\n        }).then((response) => {\n            // your code goes here\n             callback(null, response.body);\n        }).catch((err) => {\n            // error handling goes here\n            console.log(err);\n            callback(\"Execution failed\");\n        });\n\n\n        callback(null, access_token);\n    }).catch((err) => {\n        console.log(err);\n        callback(\"Execution failed\");\n    });\n\n}",
+        "triggers": [],
+        "config": {
+          "runtime": "nodejs8.10",
+          "timeout": 60,
+          "memory": 128
+        },
+        "testCases": {
+          "3344d9a9-4423-4d26-9b18-f1c58037301e": {
+            "id": "3344d9a9-4423-4d26-9b18-f1c58037301e",
+            "name": "testEvent",
+            "functionId": "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f",
+            "event": "{\n    \n}"
+          }
+        }
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "0936680c-c4b1-4b95-a456-f054f30dca39",
+    "openFiles": [
+      "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f"
+    ],
+    "currentFileId": "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f",
+    "resources": {},
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "swagger-client": {
+          "name": "swagger-client",
+          "version": "3.8.21"
+        }
+      }
+    },
+    "lambdaId": "b0ff4bfb-1eea-45b7-8145-ddc34bdaa42f"
+  },
+  "PROJECT_META": {
+    "projectName": "getBankAccounts",
+    "projectDescription": "Simple Bank Accounts Project",
+    "projectVersion": "1.0.0",
+    "projectRegion": "ap-southeast-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1551915057461
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "getBankAccounts",
+      "url": "https://github.com/apixDemo/simpleBanks"
+    }
+  }
+}
